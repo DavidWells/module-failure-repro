@@ -87,6 +87,103 @@ SyntaxError: Cannot use import statement outside a module
     at Module._compile (internal/modules/cjs/loader.js:1063:30)
 ```
 
-## Notes
+## add "type" module
+
+Adding `"type": "module"` in package.json results in this error
+
+```
+rror [ERR_REQUIRE_ESM]: Must use import to load ES Module: /Users/dir/scratch/module-failure-repro/node_modules/tiny-cognito/dist/index.modern.js
+require() of ES modules is not supported.
+require() of /Users/dir/scratch/module-failure-repro/node_modules/tiny-cognito/dist/index.modern.js from /Users/dir/scratch/module-failure-repro/.next/server/pages/index.js is an ES module file as it is a .js file whose nearest parent package.json contains "type": "module" which defines all .js files in that package scope as ES modules.
+Instead rename index.modern.js to end in .cjs, change the requiring code to use import(), or remove "type": "module" from /Users/dir/scratch/module-failure-repro/node_modules/tiny-cognito/package.json.
+
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1080:13)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at eval (webpack-internal:///tiny-cognito:1:18)
+    at Object.tiny-cognito (/Users/dir/scratch/module-failure-repro/.next/server/pages/index.js:148:1)
+    at __webpack_require__ (/Users/dir/scratch/module-failure-repro/.next/server/pages/index.js:23:31)
+    at eval (webpack-internal:///./pages/index.js:9:70)
+    at Module../pages/index.js (/Users/dir/scratch/module-failure-repro/.next/server/pages/index.js:104:1)
+    at __webpack_require__ (/Users/dir/scratch/module-failure-repro/.next/server/pages/index.js:23:31)
+    at /Users/dir/scratch/module-failure-repro/.next/server/pages/index.js:91:18
+    at Object.<anonymous> (/Users/dir/scratch/module-failure-repro/.next/server/pages/index.js:94:10)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32) {
+  code: 'ERR_REQUIRE_ESM'
+}
+Error [ERR_REQUIRE_ESM]: Must use import to load ES Module: /Users/dir/scratch/module-failure-repro/node_modules/tiny-cognito/dist/index.modern.js
+require() of ES modules is not supported.
+require() of /Users/dir/scratch/module-failure-repro/node_modules/tiny-cognito/dist/index.modern.js from /Users/dir/scratch/module-failure-repro/.next/server/pages/index.js is an ES module file as it is a .js file whose nearest parent package.json contains "type": "module" which defines all .js files in that package scope as ES modules.
+Instead rename index.modern.js to end in .cjs, change the requiring code to use import(), or remove "type": "module" from /Users/dir/scratch/module-failure-repro/node_modules/tiny-cognito/package.json.
+
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1080:13)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at eval (webpack-internal:///tiny-cognito:1:18)
+    at Object.tiny-cognito (/Users/dir/scratch/module-failure-repro/.next/server/pages/index.js:148:1)
+    at __webpack_require__ (/Users/dir/scratch/module-failure-repro/.next/server/pages/index.js:23:31)
+    at eval (webpack-internal:///./pages/index.js:9:70)
+    at Module../pages/index.js (/Users/dir/scratch/module-failure-repro/.next/server/pages/index.js:104:1)
+    at __webpack_require__ (/Users/dir/scratch/module-failure-repro/.next/server/pages/index.js:23:31)
+    at /Users/dir/scratch/module-failure-repro/.next/server/pages/index.js:91:18
+    at Object.<anonymous> (/Users/dir/scratch/module-failure-repro/.next/server/pages/index.js:94:10)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32) {
+  code: 'ERR_REQUIRE_ESM'
+}
+```
+
+<details>
+<summary>pkg with type</summary>
+
+```json
+{
+  "author": {
+    "name": "DavidWells"
+  },
+  "bugs": {
+    "url": "https://github.com/DavidWells/tiny-cognito/issues"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity-browser": "0.1.0-preview.2"
+  },
+  "description": "Get AWS Cognito creds to use with aws4fetch",
+  "devDependencies": {
+    "microbundle": "^0.13.0"
+  },
+  "exports": "./dist/index.modern.js",
+  "homepage": "https://github.com/DavidWells/tiny-cognito#readme",
+  "license": "ISC",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.module.js",
+  "name": "tiny-cognito",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DavidWells/tiny-cognito.git"
+  },
+  "scripts": {
+    "build": "microbundle",
+    "dev": "microbundle watch",
+    "release:major": "npm version major && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:patch": "npm version patch && npm publish"
+  },
+  "source": "src/index.js",
+  "unpkg": "dist/index.umd.js",
+  "version": "0.0.8"
+}
+```
+
+</details>
+
+# Notes
 
 This exact same code works in node 12 but not on node 14. ¯\_(ツ)_/¯
