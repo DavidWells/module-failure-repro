@@ -1,5 +1,8 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
+import cognitoAuth from 'tiny-cognito'
+
+console.log('cognitoAuth', cognitoAuth)
 
 export default function Home() {
   return (
